@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import clase.Cliente;
-import clase.Empleado;
 import util.ConexionBD;
 
 public class ClienteDAO implements GenericDAO<Cliente> {
@@ -20,6 +19,7 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 	    try (Connection con = ConexionBD.getConnection();
 	         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 	          ps.setString(1, objeto.getDireccion());
+	          
 	          int filas = ps.executeUpdate();
 	          if (filas > 0) {
 	                ResultSet rs = ps.getGeneratedKeys();
@@ -65,9 +65,10 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 				WHERE cl.id = ?;
 				""";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 
-			ps.setInt(1, id);
+			
 
 			while (rs.next()) {
 				return mapearFila(rs);

@@ -46,12 +46,13 @@ public class EmpleadoDAO implements GenericDAO<Empleado> {
 				SELECT f.*
 				FROM empleado e
 				INNER JOIN factura f on e.id = f.id_empleado
-				WHERE f.id = ?;
+				WHERE e.id = ?;
 				""";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 
-			ps.setInt(1, id);
+			
 
 			while (rs.next()) {
 				return mapearFila(rs);
@@ -79,16 +80,16 @@ public class EmpleadoDAO implements GenericDAO<Empleado> {
 	public List<Empleado> resumenMensual(int mes) {
 		List<Empleado> lista = new ArrayList<Empleado>();
 		String sql = """
-				SELECT e.id, count(f.id_empleado) as FacturasTotales, sum(total) as TotalFacturado
+				SELECT e.id, e.puesto, e.salario, count(f.id_empleado) as FacturasTotales, sum(total) as TotalFacturado
 				FROM empleado e
 				LEFT JOIN factura f on e.id = f.id_empleado
 				WHERE MONTH(f.fecha) = ?
-				GROUP BY e.id;
-				""";
+				GROUP BY e.id
+								""";
 
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-			ResultSet rs = ps.executeQuery();
 			ps.setInt(1, mes);
+			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
 				lista.add(mapearFila(rs));
