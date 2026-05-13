@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +16,24 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 
 	@Override
 	public boolean insertar(Cliente objeto) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	    String sql = "INSERT INTO cliente(direccion) VALUES(?)";
+	    try (Connection con = ConexionBD.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+	          ps.setString(1, objeto.getDireccion());
+	          int filas = ps.executeUpdate();
+	          if (filas > 0) {
+	                ResultSet rs = ps.getGeneratedKeys();
+	                if (rs.next()) {
+	                    objeto.setId(rs.getInt(1));
+	                }
+	                return true;
+	            }
+	      } catch (SQLException e) {
+	            System.out.println("Error al insertar: " + e.getMessage());
+	      }
+	        return false;
+	    }
+
 
 	@Override
 	public List<Cliente> obtenerTodos() {
