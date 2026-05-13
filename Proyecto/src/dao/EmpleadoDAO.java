@@ -1,5 +1,7 @@
 package dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import clase.Empleado;
@@ -36,4 +38,13 @@ public class EmpleadoDAO implements GenericDAO<Empleado> {
 		return false;
 	}
 
+	private Empleado mapearFila(ResultSet rs) throws SQLException {
+		Empleado a = new Empleado();
+	  a.setId(rs.getInt("id"));
+	  a.setPuesto(rs.getString("puesto"));
+	  a.setPuesto(rs.getString("salario"));
+	  return a;
+    }
+
+	
 }
