@@ -22,10 +22,7 @@ public class EmpleadoDAO implements GenericDAO<Empleado> {
 	@Override
 	public List<Empleado> obtenerTodos() {
 		List<Empleado> lista = new ArrayList<Empleado>();
-		String sql = """
-				SELECT id, puesto, salario
-				FROM empleado
-				""";
+		String sql = "SELECT id, puesto, salario FROM empleado";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -42,12 +39,7 @@ public class EmpleadoDAO implements GenericDAO<Empleado> {
 
 	@Override
 	public Empleado obtenerPorId(int id) {
-		String sql = """
-				SELECT f.*
-				FROM empleado e
-				INNER JOIN factura f on e.id = f.id_empleado
-				WHERE e.id = ?;
-				""";
+		String sql = "SELECT f.* FROM empleado e INNER JOIN factura f on e.id = f.id_empleado WHERE e.id = ?;";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -79,13 +71,7 @@ public class EmpleadoDAO implements GenericDAO<Empleado> {
 
 	public List<Empleado> resumenMensual(int mes) {
 		List<Empleado> lista = new ArrayList<Empleado>();
-		String sql = """
-				SELECT e.id, e.puesto, e.salario, count(f.id_empleado) as FacturasTotales, sum(total) as TotalFacturado
-				FROM empleado e
-				LEFT JOIN factura f on e.id = f.id_empleado
-				WHERE MONTH(f.fecha) = ?
-				GROUP BY e.id
-								""";
+		String sql = "SELECT e.id, e.puesto, e.salario, count(f.id_empleado) as FacturasTotales, sum(total) as TotalFacturado FROM empleado e LEFT JOIN factura f on e.id = f.id_empleado WHERE MONTH(f.fecha) = ? GROUP BY e.id";
 
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setInt(1, mes);

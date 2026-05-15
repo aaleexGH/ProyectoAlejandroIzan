@@ -1,6 +1,8 @@
 package clase;
 
-public final class Cliente {
+import java.io.Serializable;
+
+public final class Cliente implements Serializable{
 
 	private int id;
 	private String direccion;

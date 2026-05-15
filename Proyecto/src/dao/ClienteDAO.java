@@ -15,11 +15,12 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 
 	@Override
 	public boolean insertar(Cliente objeto) {
-	    String sql = "INSERT INTO cliente(direccion) VALUES(?)";
-	    try (Connection con = ConexionBD.getConnection();
-	         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-	          ps.setString(1, objeto.getDireccion());
-	          
+		String sql = "INSERT INTO cliente(id, direccion) VALUES(?, ?)";
+		try (Connection con = ConexionBD.getConnection();
+		     PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			  ps.setInt(1, objeto.getId());
+			  ps.setString(2, objeto.getDireccion());	
+			  
 	          int filas = ps.executeUpdate();
 	          if (filas > 0) {
 	                ResultSet rs = ps.getGeneratedKeys();
@@ -38,10 +39,7 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 	@Override
 	public List<Cliente> obtenerTodos() {
 		List<Cliente> lista = new ArrayList<Cliente>();
-		String sql = """
-				SELECT id, direccion
-				FROM cliente
-				""";
+		String sql = "SELECT id, direccion FROM cliente";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -58,12 +56,7 @@ public class ClienteDAO implements GenericDAO<Cliente> {
 
 	@Override
 	public Cliente obtenerPorId(int id) {
-		String sql = """
-				SELECT *
-				FROM cliente cl
-				INNER JOIN factura f on cl.id = f.id_Cliente
-				WHERE cl.id = ?;
-				""";
+		String sql = "SELECT * FROM cliente cl INNER JOIN factura f on cl.id = f.id_Cliente	WHERE cl.id = ?";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
