@@ -1,6 +1,6 @@
 package clase;
 
-public class Empleado {
+public class Empleado extends Persona {
 
 	private int id;
 	private String puesto;
@@ -9,7 +9,7 @@ public class Empleado {
 	public Empleado() {
 		super();
 	}
-
+	
 	public Empleado(String puesto, double salario) {
 		super();
 		this.puesto = puesto;
@@ -49,7 +49,7 @@ public class Empleado {
 
 	@Override
 	public String toString() {
-		return "Id Empleado: " + id + " | Puesto: " + puesto + " | Salario: " + salario;
+		return "Empleado Id: " + id + " | Puesto: " + puesto + " | Salario: " + salario;
 	}
 	
 	
