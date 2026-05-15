@@ -5,7 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
+import clase.Cliente;
 import clase.Factura;
 import util.ConexionBD;
 
@@ -40,9 +44,22 @@ public class FacturaDAO implements GenericDAO<Factura> {
 
 	@Override
 	public List<Factura> obtenerTodos() {
-		// TODO Auto-generated method stub
+		List<Cliente> lista = new ArrayList<Cliente>();
+		String sql = "SELECT id, direccion FROM cliente";
+		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				lista.add(mapearFila(rs));
+			}
+			return lista;
+
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
 		return null;
+
 	}
+
 
 	@Override
 	public Factura obtenerPorId(int id) {
@@ -62,4 +79,13 @@ public class FacturaDAO implements GenericDAO<Factura> {
 		return false;
 	}
 	
+	private Factura mapearFila(ResultSet rs) throws SQLException {
+		Factura a = new Factura();
+		a.setId(rs.getInt("id"));
+		a.setFecha((LocalDate) rs.getObject("fecha"));
+		a.setId_cliente(rs.getInt("Id_cliente"));
+		a.setId_empleado(rs.getInt("Id_empleado"));
+		a.setIva(rs.getDouble("Iva"));
+		return a;
+	}
 }
