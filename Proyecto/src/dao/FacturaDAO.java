@@ -44,8 +44,8 @@ public class FacturaDAO implements GenericDAO<Factura> {
 
 	@Override
 	public List<Factura> obtenerTodos() {
-		List<Cliente> lista = new ArrayList<Cliente>();
-		String sql = "SELECT id, direccion FROM cliente";
+		List<Factura> lista = new ArrayList<Factura>();
+		String sql = "select * from factura";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -60,11 +60,24 @@ public class FacturaDAO implements GenericDAO<Factura> {
 
 	}
 
-
+	
 	@Override
 	public Factura obtenerPorId(int id) {
-		// TODO Auto-generated method stub
+		String sql = "select id, fecha, id_cliente, id_empleado, subtotal, iva, total from factura where id = ?";
+		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+			
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return mapearFila(rs);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
 		return null;
+
 	}
 
 	@Override
@@ -86,6 +99,8 @@ public class FacturaDAO implements GenericDAO<Factura> {
 		a.setId_cliente(rs.getInt("Id_cliente"));
 		a.setId_empleado(rs.getInt("Id_empleado"));
 		a.setIva(rs.getDouble("Iva"));
+		a.setSubtotal(rs.getDouble("Subtotal"));
+		a.setTotal(rs.getDouble("Total"));
 		return a;
 	}
 }
