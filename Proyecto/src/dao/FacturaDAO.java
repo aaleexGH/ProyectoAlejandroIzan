@@ -17,7 +17,7 @@ public class FacturaDAO implements GenericDAO<Factura> {
 
 	@Override
 	public boolean insertar(Factura objeto) {
-		String sql = "insert into factura ( fecha, id_cliente, id_empleado, subtotal, iva, total) values (,?,?,?,?,?,?)";
+		String sql = "insert into factura ( fecha, id_cliente, id_empleado, subtotal, iva, total) values (?,?,?,?,?,?)";
 	    try (Connection con = ConexionBD.getConnection();
 	         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
