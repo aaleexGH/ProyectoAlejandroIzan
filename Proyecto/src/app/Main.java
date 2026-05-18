@@ -9,14 +9,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import clase.Cliente;
-import clase.Empleado;
 import dao.ClienteDAO;
 import dao.EmpleadoDAO;
-import util.ConexionBD;
+import util.ConexionBD;  
+import clase.*;
+import dao.*;
 
 public class Main {
 
@@ -24,6 +25,10 @@ public class Main {
 
 		EmpleadoDAO eDao = new EmpleadoDAO();
 		ClienteDAO cDao = new ClienteDAO();
+		LineaFacturaDAO lfDao = new LineaFacturaDAO();
+		FacturaDAO fDao = new FacturaDAO();
+		ProductoDAO pDao = new ProductoDAO();
+		Producto p = new Producto("maria", 6.4, 150);
 
 		// 1. Muestra todos los clientes, selecciona uno escribiendo el id y muestra sus
 		// datos y sus facturas.
@@ -52,11 +57,30 @@ public class Main {
 		eDao.obtenerPorId(3);
 
 		// 3. Muestra una factura por id junto con todas sus líneas de factura.
+			
+			System.out.println("lista de lineas de factura por id");
+			
+			for (LineaFactura leer : lfDao.obtenerporIdFactura(4)) {
+					System.out.println(leer);
+			}
 
 		// 4. Muestra todas las facturas de un mes, pide el número del mes y calcula el
 		// total facturado ese mes.
-
+			
+			System.out.println("muestra todas las facturas de un mes: ");
+			for (Factura leer : fDao.mostrarFacturasPorMes(5)) {
+				System.out.println(leer);
+			}
+			
+			
 		// 5. Muestra todas las facturas de una fecha concreta, por ejemplo 05-05-2026
+			
+				System.out.println("muesta todas las facturas con la fecha concreta");
+				
+				LocalDate ld =  LocalDate.of(2026, 05, 05);
+				for (Factura leer : fDao.mostrarFacturasPorFecha(ld)) {
+					System.out.println(leer);
+				}
 
 		// 6. Añade un cliente: 12345678Z, Pepe Carrera, Plaza Mozart 3
 		System.out.println("");
@@ -65,10 +89,27 @@ public class Main {
 		System.out.println(cDao.insertar(new Cliente(6, "Plaza Mozart 3")));
 		// 7. Añadir nuevo producto: pide los datos por teclado e inserta un producto
 		// nuevo si no existe un producto con ese nombre.
-
+			
+		System.out.println("añadir nuevo producto");
+		
+		
+		
+			if (p.getNombre() == null) {
+				System.out.println(pDao.insertar(p));
+			}
+			else {
+				System.out.println("El producto " + p.getNombre() + " ya existe.");
+			}
+		
 		// 8. Actualizar producto: muestra los productos, selecciona uno por id y
 		// actualiza su precio.
-
+			
+			System.out.println("muestra todos");
+			for (Producto leer : pDao.obtenerTodos()) {
+				System.out.println(leer);
+			}
+			System.out.println("actualizar");
+			
 		/*
 		 * 9. Crear factura: muestra todos los clientes, selecciona uno. Muestra todos
 		 * los empleados, selecciona uno. Muestra los productos disponibles y ves

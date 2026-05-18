@@ -95,4 +95,25 @@ public class LineaFacturaDAO implements GenericDAO<LineaFactura>{
 		return a;
 
 	}
+	
+	public List<LineaFactura> obtenerporIdFactura(int id) {
+		List<LineaFactura> lista = new ArrayList<LineaFactura>();
+		String sql = "select id, id_factura, id_producto, cantidad, precio_unitario, importe from lineafactura where id = ?";
+		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+		
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+		
+			while (rs.next()) {
+				lista.add(mapearFila(rs));
+			}
+			return lista;
+
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+		return null;
+	}
+
 }

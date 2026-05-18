@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import clase.Cliente;
 import clase.Factura;
 import clase.Producto;
 import util.ConexionBD;
@@ -17,7 +18,7 @@ public class ProductoDAO implements GenericDAO<Producto>{
 
 	@Override
 	public boolean insertar(Producto objeto) {
-		String sql = "insert into factura (nombre, precio, stock) values (?,?,?)";
+		String sql = "insert into producto (nombre, precio, stock) values (?,?,?)";
 	    try (Connection con = ConexionBD.getConnection();
 	         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -59,7 +60,7 @@ public class ProductoDAO implements GenericDAO<Producto>{
 
 	@Override
 	public Producto obtenerPorId(int id) {
-		String sql = "select id, nombre, preio, stock from factura where id = ?";
+		String sql = "select id, nombre, preio, stock from Producto where id = ?";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 			
 			ps.setInt(1, id);
@@ -96,6 +97,12 @@ public class ProductoDAO implements GenericDAO<Producto>{
 		a.setStock(rs.getInt("stock"));
 		return a;
 	}
+	
+	
+
+	
+	
+	
 	
 
 }

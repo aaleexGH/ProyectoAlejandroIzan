@@ -11,6 +11,7 @@ import java.util.List;
 
 import clase.Cliente;
 import clase.Factura;
+import clase.LineaFactura;
 import util.ConexionBD;
 
 public class FacturaDAO implements GenericDAO<Factura> {
@@ -103,4 +104,44 @@ public class FacturaDAO implements GenericDAO<Factura> {
 		a.setTotal(rs.getDouble("Total"));
 		return a;
 	}
-}
+	
+	public List<Factura> mostrarFacturasPorMes(int mes) {
+		List<Factura> lista = new ArrayList<Factura>();
+		String sql = "SELECT id, fecha, id_cliente, id_empleado, subtotal, iva, total FROM factura WHERE MONTH(fecha) = ";
+		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+		
+			ps.setInt(1, mes);
+			
+			ResultSet rs = ps.executeQuery();
+		
+			while (rs.next()) {
+				lista.add(mapearFila(rs));
+			}
+			return lista;
+
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+		return null;
+	}
+		
+		public List<Factura> mostrarFacturasPorFecha(LocalDate fecha) {
+			List<Factura> lista = new ArrayList<Factura>();
+			String sql = "SELECT id, fecha, id_cliente, id_empleado, subtotal, iva, total FROM factura WHERE fecha = ?";
+			try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+			
+				ps.setObject(1, fecha);
+				
+				ResultSet rs = ps.executeQuery();
+			
+				while (rs.next()) {
+					lista.add(mapearFila(rs));
+				}
+				return lista;
+
+			} catch (SQLException e) {
+				System.out.println("Error: " + e.getMessage());
+			}
+			return null;
+
+}}
