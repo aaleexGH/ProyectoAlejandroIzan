@@ -94,7 +94,7 @@ public class Main {
 		
 		
 		
-			if (p.getNombre() == null) {
+			if (pDao.obtenerPorNombre(p.getNombre()) == 0) {
 				System.out.println(pDao.insertar(p));
 			}
 			else {
@@ -109,6 +109,7 @@ public class Main {
 				System.out.println(leer);
 			}
 			System.out.println("actualizar");
+			
 			
 		/*
 		 * 9. Crear factura: muestra todos los clientes, selecciona uno. Muestra todos

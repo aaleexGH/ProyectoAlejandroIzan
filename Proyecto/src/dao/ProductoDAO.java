@@ -98,11 +98,25 @@ public class ProductoDAO implements GenericDAO<Producto>{
 		return a;
 	}
 	
-	
+	public int obtenerPorNombre(String nombre) {
+		String sql = "select count(nombre) as contar from factura where nombre = ?";
+		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+			
+			ps.setString(1, nombre );
+			
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return (rs.getInt("contar"));
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+		return 0;
 
 	
 	
 	
 	
-
+	}
 }
