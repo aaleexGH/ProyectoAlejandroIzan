@@ -79,9 +79,24 @@ public class ProductoDAO implements GenericDAO<Producto>{
 
 	@Override
 	public boolean actualizar(Producto objeto) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		String sql = "UPDATE producto SET precio = ? WHERE id = ?;";
+	    try (Connection con = ConexionBD.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+	          int filas = ps.executeUpdate();
+	          if (filas > 0) {
+	                ResultSet rs = ps.getGeneratedKeys();
+	                if (rs.next()) {
+	                    objeto.setId(rs.getInt(1));
+	                }
+	                return true;
+	            }
+	      } catch (SQLException e) {
+	            System.out.println("Error al insertar: " + e.getMessage());
+	      }
+	        return false;
+	    }
+
 
 	@Override
 	public boolean eliminar(int id) {
