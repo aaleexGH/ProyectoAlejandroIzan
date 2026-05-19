@@ -1,8 +1,6 @@
 package clase;
 
-import java.io.Serializable;
-
-public final class Cliente implements Serializable{
+public class Cliente extends Persona {
 
 	private int id;
 	private String direccion;
@@ -15,7 +13,7 @@ public final class Cliente implements Serializable{
 		super();
 		this.direccion = direccion;
 	}
-
+	
 	public Cliente(int id, String direccion) {
 		super();
 		this.id = id;
@@ -40,8 +38,10 @@ public final class Cliente implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Id Cliente: " + id + " | Direccion: " + direccion;
+		return "Cliente: " + id + " | Direccion: " + direccion;
 	}
+
+	
 	
 	
 	
