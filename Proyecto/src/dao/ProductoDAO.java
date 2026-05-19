@@ -79,10 +79,12 @@ public class ProductoDAO implements GenericDAO<Producto> {
 
 	@Override
 	public boolean actualizar(Producto objeto) {
-		String sql = "UPDATE producto SET precio = ? WHERE id = ?;";
+
+		String sql = "UPDATE producto SET precio = ? WHERE id = ?";
 		try (Connection con = ConexionBD.getConnection();
 				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
+			ps.setDouble(1, objeto.getPrecio());
+			ps.setInt(2, objeto.getId());
 			int filas = ps.executeUpdate();
 			if (filas > 0) {
 				ResultSet rs = ps.getGeneratedKeys();
@@ -127,6 +129,40 @@ public class ProductoDAO implements GenericDAO<Producto> {
 			System.out.println("Error: " + e.getMessage());
 		}
 		return 0;
+	}
+
+	public boolean eliminarProductoSiEstaEnLineaFactura(int id) {
+
+		String sql = "DELETE FROM producto where id = ?";
+
+		try (Connection con = ConexionBD.getConnection();
+
+				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+			ps.setInt(1, id);
+
+			int filas = ps.executeUpdate();
+
+			if (filas > 0) {
+
+				ResultSet rs = ps.getGeneratedKeys();
+
+				if (rs.next()) {
+
+					return true;
+
+				}
+
+			}
+
+		} catch (SQLException e) {
+
+			System.out.println("Error al insertar: " + e.getMessage());
+
+		}
+
+		return false;
+
 	}
 
 }

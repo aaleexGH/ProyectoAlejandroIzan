@@ -144,4 +144,23 @@ public class FacturaDAO implements GenericDAO<Factura> {
 			}
 			return null;
 
-}}
+		}
+		
+		public Factura obtenerPorProducto(int id) {
+			String sql = "select id, fecha, id_cliente, id_empleado, subtotal, iva, total from factura where id_producto = ?";
+			try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+				
+				ps.setInt(1, id);
+				
+				ResultSet rs = ps.executeQuery();
+				while (rs.next()) {
+					return mapearFila(rs);
+				}
+
+			} catch (SQLException e) {
+				System.out.println("Error: " + e.getMessage());
+			}
+			return null;
+
+		}
+}

@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import dao.ClienteDAO;
@@ -108,7 +109,7 @@ public class Main {
 				System.out.println(leer);
 			}
 			System.out.println("actualizar");
-			
+			System.out.println(pDao.actualizar(p));
 			
 			
 		/*
@@ -122,8 +123,28 @@ public class Main {
 		// 10. Muestra todos los productos y selecciona uno. Muestras las facturas en
 		// las que aparece.
 
+		System.out.println("muestra todos los productos");
+		for (Producto leer : pDao.obtenerTodos()) {
+			System.out.println(leer);
+		}
+		
+		System.out.println(fDao.obtenerPorProducto(6));
+				
+			
 		// 11. Muestra los productos, selecciona uno por id y elimínalo, si no aparece
 		// en ninguna línea de factura.
+		
+		System.out.println("muestra todos los productos");
+		for (Producto leer : pDao.obtenerTodos()) {
+			System.out.println(leer);
+		}
+		
+		if (lfDao.obtenerPorIdProducto(4)>0) {
+			System.out.println("existe");
+		}else {
+			System.out.println(pDao.eliminarProductoSiEstaEnLineaFactura(4));
+		}
+			
 
 		/*
 		 * 12. Guarda los clientes en el fichero “clientes.dat”. Lee ese fichero en una
