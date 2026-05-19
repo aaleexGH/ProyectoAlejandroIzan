@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 import dao.ClienteDAO;
 import dao.EmpleadoDAO;
@@ -22,6 +23,7 @@ import dao.*;
 public class Main {
 
 	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
 
 		EmpleadoDAO eDao = new EmpleadoDAO();
 		ClienteDAO cDao = new ClienteDAO();
@@ -30,82 +32,84 @@ public class Main {
 		ProductoDAO pDao = new ProductoDAO();
 		Producto p = new Producto("maria", 6.4, 150);
 		Factura f = new Factura(2, null, 4, 3, 5, 5.5, 400);
+		
+		System.out.println("mostrar consultas del 1 al 15: ");
+		int respuesta = Integer.parseInt(sc.nextLine());
+		switch (respuesta) {
+		case 1:
+			System.out.println("MOSTRAR TODOS LOS CLIENTES: ");
+			for (Cliente cTodos : cDao.obtenerTodos()) {
+				System.out.println(cTodos);
+			}
 
+			System.out.println("");
 
-		// 1. Muestra todos los clientes, selecciona uno escribiendo el id y muestra sus
-		// datos y sus facturas.
-		System.out.println("MOSTRAR TODOS LOS CLIENTES: ");
-		for (Cliente cTodos : cDao.obtenerTodos()) {
-			System.out.println(cTodos);
-		}
+			System.out.println("MOSTRAR TODOS LOS DATOS DE UN CLIENTE POR ID: ");
+			System.out.println(cDao.obtenerPorId(3));
 
-		System.out.println("");
-
-		System.out.println("MOSTRAR TODOS LOS DATOS DE UN CLIENTE POR ID: ");
-		System.out.println(cDao.obtenerPorId(3));
-
-		// 2. Muestra todos los empleados y seleccionando un id muestra las facturas que
-		// ha emitido.
-		System.out.println("");
-
-		System.out.println("MOSTRAR TODOS LOS EMPLEADOS: ");
-		for (Empleado eTodos : eDao.obtenerTodos()) {
-			System.out.println(eTodos);
-		}
-
-		System.out.println("");
-
-		System.out.println("MOSTRAR TODAS LAS FACTURAS DE UN EMPLEADO POR ID: ");
-		eDao.obtenerPorId(3);
-
-		// 3. Muestra una factura por id junto con todas sus líneas de factura.
 			
+			break;
+			
+		case 2:
+			System.out.println("");
+
+			System.out.println("MOSTRAR TODOS LOS EMPLEADOS: ");
+			for (Empleado eTodos : eDao.obtenerTodos()) {
+				System.out.println(eTodos);
+			}
+
+			System.out.println("");
+
+			System.out.println("MOSTRAR TODAS LAS FACTURAS DE UN EMPLEADO POR ID: ");
+			eDao.obtenerPorId(3);
+
+			
+			break;	
+		case 3:
 			System.out.println("lista de lineas de factura por id");
 			
 			for (LineaFactura leer : lfDao.obtenerporIdFactura(4)) {
 					System.out.println(leer);
 			}
-
-		// 4. Muestra todas las facturas de un mes, pide el número del mes y calcula el
-		// total facturado ese mes.
-			
+			break;
+		case 4:
 			System.out.println("muestra todas las facturas de un mes: ");
 			for (Factura leer : fDao.mostrarFacturasPorMes(5)) {
 				System.out.println(leer);
 			}
 			
+			break;
+		case 5:
+			System.out.println("muesta todas las facturas con la fecha concreta");
 			
-		// 5. Muestra todas las facturas de una fecha concreta, por ejemplo 05-05-2026
+			LocalDate ld =  LocalDate.of(2026, 05, 05);
+			for (Factura leer : fDao.mostrarFacturasPorFecha(ld)) {
+				System.out.println(leer);
+			}
 			
-				System.out.println("muesta todas las facturas con la fecha concreta");
-				
-				LocalDate ld =  LocalDate.of(2026, 05, 05);
-				for (Factura leer : fDao.mostrarFacturasPorFecha(ld)) {
-					System.out.println(leer);
-				}
+			break;
+			
+		case 6:
+			System.out.println("");
 
-		// 6. Añade un cliente: 12345678Z, Pepe Carrera, Plaza Mozart 3
-		System.out.println("");
-
-		System.out.println("INSERTAR CLIENTE: ");
-		System.out.println(cDao.insertar(new Cliente(6, "Plaza Mozart 3")));
-		// 7. Añadir nuevo producto: pide los datos por teclado e inserta un producto
-		// nuevo si no existe un producto con ese nombre.
+			System.out.println("INSERTAR CLIENTE: ");
+			System.out.println(cDao.insertar(new Cliente(6, "Plaza Mozart 3")));
 			
-		System.out.println("añadir nuevo producto");
-		
-		
-		
+			break;	
+		case 7:
+			System.out.println("añadir nuevo producto");
+			
+			
+			
 			if (pDao.obtenerPorNombre(p.getNombre()) == 0) {
 				System.out.println(pDao.insertar(p));
 			}
 			else {
 				System.out.println("El producto " + p.getNombre() + " ya existe.");
 			}
-		
-		// 8. Actualizar producto: muestra los productos, selecciona uno por id y
-		// actualiza su precio.
 			
+			break;
+		case 8:
 			System.out.println("muestra todos");
 			for (Producto leer : pDao.obtenerTodos()) {
 				System.out.println(leer);
@@ -113,14 +117,8 @@ public class Main {
 			System.out.println("actualizar");
 			System.out.println(pDao.actualizar(p));
 			
-			
-		/*
-		 * 9. Crear factura: muestra todos los clientes, selecciona uno. Muestra todos
-		 * los empleados, selecciona uno. Muestra los productos disponibles y ves
-		 * añadiendo productos seleccionando su id hasta introducir 0. Crea una factura
-		 * y ves creando líneas de factura con los productos seleccionados. Al final
-		 * muestra la factura con todos sus datos y todas sus líneas.
-		 */
+			break;
+		case 9:
 			System.out.println("muestra todas facturas");
 			for (Factura leer : fDao.obtenerTodos()) {
 				System.out.println(leer);
@@ -138,85 +136,81 @@ public class Main {
 			fDao.insertar(f);
 			
 			
-
-		// 10. Muestra todos los productos y selecciona uno. Muestras las facturas en
-		// las que aparece.
-
-		System.out.println("muestra todos los productos");
-		for (Producto leer : pDao.obtenerTodos()) {
-			System.out.println(leer);
-		}
-		
-		System.out.println(fDao.obtenerPorProducto(6));
+			
+			break;
+			
+		case 10:
+			System.out.println("muestra todos los productos");
+			for (Producto leer : pDao.obtenerTodos()) {
+				System.out.println(leer);
+			}
+			
+			System.out.println(fDao.obtenerPorProducto(6));
+			
+			break;	
+		case 11:
+			System.out.println("muestra todos los productos");
+			for (Producto leer : pDao.obtenerTodos()) {
+				System.out.println(leer);
+			}
+			
+			if (lfDao.obtenerPorIdProducto(4)>0) {
+				System.out.println("existe");
+			}else {
+				System.out.println(pDao.eliminarProductoSiEstaEnLineaFactura(4));
+			}
 				
 			
-		// 11. Muestra los productos, selecciona uno por id y elimínalo, si no aparece
-		// en ninguna línea de factura.
-		
-		System.out.println("muestra todos los productos");
-		for (Producto leer : pDao.obtenerTodos()) {
-			System.out.println(leer);
-		}
-		
-		if (lfDao.obtenerPorIdProducto(4)>0) {
-			System.out.println("existe");
-		}else {
-			System.out.println(pDao.eliminarProductoSiEstaEnLineaFactura(4));
-		}
-			
+			break;
+		case 12:
+			ClienteDAO dao = new ClienteDAO();
+			List<Cliente> listaClientes = dao.obtenerTodos();
 
-		/*
-		 * 12. Guarda los clientes en el fichero “clientes.dat”. Lee ese fichero en una
-		 * lista y muestra los datos de los clientes de esa lista.
-		 */
-		ClienteDAO dao = new ClienteDAO();
-		List<Cliente> listaClientes = dao.obtenerTodos();
+			try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("clientes.dat"))) {
 
-		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("clientes.dat"))) {
+				out.writeObject(listaClientes);
+				System.out.println("Clientes guardados en el fichero.");
 
-			out.writeObject(listaClientes);
-			System.out.println("Clientes guardados en el fichero.");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("clientes.dat"))) {
-
-			List<Cliente> listaLeida = (List<Cliente>) in.readObject();
-
-			System.out.println("\nMostrando clientes desde el fichero:");
-			for (Cliente c : listaLeida) {
-				System.out.println(c);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("clientes.dat"))) {
 
-		/*
-		 * 13. Duplica una factura existente en una nueva fecha: pide un idFactura,
-		 * copia la factura y todas sus líneas en una nueva factura con la fecha actual
-		 * y muestra la nueva factura creada.
-		 */
+				List<Cliente> listaLeida = (List<Cliente>) in.readObject();
 
-		/*
-		 * 14. Elimina una línea de factura y rehace la factura: muestra una factura con
-		 * sus líneas, selecciona una línea por id, elimínala, recalcula subtotal, IVA y
-		 * total, actualiza la factura y vuelve a mostrarla
-		 */
+				System.out.println("\nMostrando clientes desde el fichero:");
+				for (Cliente c : listaLeida) {
+					System.out.println(c);
+				}
 
-		/*
-		 * 15. Resumen mensual por empleado: pide un número de mes y muestra cada
-		 * empleado con el número de facturas emitidas y el importe total facturado por
-		 * cada uno en ese mes
-		 */
-		System.out.println("");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-		System.out.println("RESUMEN MENSUAL: ");
-		for (Empleado eResumenMensual : eDao.resumenMensual(4)) {
-			System.out.println(eResumenMensual);
-		}
+			
+			break;
+		case 13:
+				System.out.println("no esta el ejercicio");
+			break;
+			
+		case 14:
+				System.out.println("no esta el ejercicio");
+			break;	
+		case 15:
+			System.out.println("");
+
+			System.out.println("RESUMEN MENSUAL: ");
+			for (Empleado eResumenMensual : eDao.resumenMensual(4)) {
+				System.out.println(eResumenMensual);
+			}
+			
+			break;
+
+		default:
+			System.out.println("numero invalido");
+			break;
+		}	
 	}
 
 }
