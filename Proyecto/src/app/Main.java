@@ -210,7 +210,7 @@ public class Main {
 		default:
 			System.out.println("numero invalido");
 			break;
-		}	
+		} 	
 	}
 
 }
