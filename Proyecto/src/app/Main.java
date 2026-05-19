@@ -108,7 +108,7 @@ public class Main {
 				System.out.println(leer);
 			}
 			System.out.println("actualizar");
-			
+			System.out.println(pDao.actualizar(p));
 			
 			
 		/*

@@ -82,7 +82,8 @@ public class ProductoDAO implements GenericDAO<Producto>{
 		String sql = "UPDATE producto SET precio = ? WHERE id = ?;";
 	    try (Connection con = ConexionBD.getConnection();
 	         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
+	          ps.setDouble(1, objeto.getPrecio());
+	          ps.setInt(2, objeto.getId());
 	          int filas = ps.executeUpdate();
 	          if (filas > 0) {
 	                ResultSet rs = ps.getGeneratedKeys();
