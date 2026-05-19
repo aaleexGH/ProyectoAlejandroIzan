@@ -29,6 +29,8 @@ public class Main {
 		FacturaDAO fDao = new FacturaDAO();
 		ProductoDAO pDao = new ProductoDAO();
 		Producto p = new Producto("maria", 6.4, 150);
+		Factura f = new Factura(2, null, 4, 3, 5, 5.5, 400);
+
 
 		// 1. Muestra todos los clientes, selecciona uno escribiendo el id y muestra sus
 		// datos y sus facturas.
@@ -119,6 +121,23 @@ public class Main {
 		 * y ves creando líneas de factura con los productos seleccionados. Al final
 		 * muestra la factura con todos sus datos y todas sus líneas.
 		 */
+			System.out.println("muestra todas facturas");
+			for (Factura leer : fDao.obtenerTodos()) {
+				System.out.println(leer);
+			}
+			
+			System.out.println("muestra todos empleados");
+			for (Empleado leer : eDao.obtenerTodos()) {
+				System.out.println(leer);
+			}
+			System.out.println("muestra todos productos");
+			for (Producto leer : pDao.obtenerTodos()) {
+				System.out.println(leer);
+			}
+			
+			fDao.insertar(f);
+			
+			
 
 		// 10. Muestra todos los productos y selecciona uno. Muestras las facturas en
 		// las que aparece.
