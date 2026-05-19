@@ -14,8 +14,19 @@ import clase.LineaFactura;
 import clase.Producto;
 import util.ConexionBD;
 
+/**
+ * DAO para gestionar la tabla lineafactura.
+ * 
+ * @author alejandroEizan
+ */
 public class LineaFacturaDAO implements GenericDAO<LineaFactura> {
 
+	/**
+	 * Inserta una línea de factura en la base de datos.
+	 *
+	 * @param objeto Línea de factura a insertar.
+	 * @return true si se inserta, false si no.
+	 */
 	@Override
 	public boolean insertar(LineaFactura objeto) {
 		String sql = "insert into lineafactura (id_factura, id_producto, cantidad, precio_unitario, importe) values (?,?,?,?,?)";
@@ -42,6 +53,11 @@ public class LineaFacturaDAO implements GenericDAO<LineaFactura> {
 		return false;
 	}
 
+	/**
+	 * Obtiene todas las líneas de factura de la base de datos.
+	 *
+	 * @return Lista de líneas de factura.
+	 */
 	@Override
 	public List<LineaFactura> obtenerTodos() {
 		List<LineaFactura> lista = new ArrayList<LineaFactura>();
@@ -59,6 +75,12 @@ public class LineaFacturaDAO implements GenericDAO<LineaFactura> {
 		return null;
 	}
 
+	/**
+	 * Busca una línea de factura por su ID.
+	 *
+	 * @param id ID de la línea de factura.
+	 * @return Línea de factura encontrada o null.
+	 */
 	@Override
 	public LineaFactura obtenerPorId(int id) {
 		String sql = "select * from lineafactura where id = ?";
@@ -77,18 +99,36 @@ public class LineaFacturaDAO implements GenericDAO<LineaFactura> {
 		return null;
 	}
 
+	/**
+	 * Actualiza los datos de una línea de factura.
+	 *
+	 * @param objeto Línea de factura a actualizar.
+	 * @return true si se actualiza, false si no.
+	 */
 	@Override
 	public boolean actualizar(LineaFactura objeto) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * Elimina una línea de factura por su ID.
+	 *
+	 * @param id ID de la línea a borrar.
+	 * @return true si se elimina, false si no.
+	 */
 	@Override
 	public boolean eliminar(int id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * Convierte una fila de ResultSet en un objeto LineaFactura.
+	 *
+	 * @param rs Fila de la consulta.
+	 * @return Línea de factura mapeada.
+	 */
 	private LineaFactura mapearFila(ResultSet rs) throws SQLException {
 		LineaFactura a = new LineaFactura();
 		a.setId(rs.getInt("id"));
@@ -98,6 +138,12 @@ public class LineaFacturaDAO implements GenericDAO<LineaFactura> {
 
 	}
 
+	/**
+	 * Obtiene todas las líneas asociadas a una factura concreta.
+	 *
+	 * @param id ID de la factura.
+	 * @return Lista de líneas asociadas a la factura.
+	 */
 	public List<LineaFactura> obtenerporIdFactura(int id) {
 		List<LineaFactura> lista = new ArrayList<LineaFactura>();
 		String sql = "select id, id_factura, id_producto, cantidad, precio_unitario, importe from lineafactura where id = ?";
@@ -117,6 +163,13 @@ public class LineaFacturaDAO implements GenericDAO<LineaFactura> {
 		}
 		return null;
 	}
+
+	/**
+	 * Cuenta cuántas veces se ha vendido un producto específico.
+	 *
+	 * @param id ID del producto.
+	 * @return Cantidad total de veces que aparece el producto en las líneas.
+	 */
 	public int obtenerPorIdProducto(int id) {
 
 		String sql = "select count(*) as total from lineafactura where id_producto = ?";

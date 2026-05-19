@@ -14,8 +14,19 @@ import clase.Factura;
 import clase.LineaFactura;
 import util.ConexionBD;
 
+/**
+ * DAO para gestionar la tabla factura.
+ * 
+ * @author alejandroEizan
+ */
 public class FacturaDAO implements GenericDAO<Factura> {
 
+	/**
+	 * Inserta una factura en la base de datos.
+	 *
+	 * @param objeto Factura a insertar.
+	 * @return true si se inserta, false si no.
+	 */
 	@Override
 	public boolean insertar(Factura objeto) {
 		String sql = "insert into factura ( fecha, id_cliente, id_empleado, subtotal, iva, total) values (?,?,?,?,?,?)";
@@ -43,6 +54,11 @@ public class FacturaDAO implements GenericDAO<Factura> {
 	        return false;
 	    }
 
+	/**
+	 * Obtiene todas las facturas de la base de datos.
+	 *
+	 * @return Lista de facturas.
+	 */
 	@Override
 	public List<Factura> obtenerTodos() {
 		List<Factura> lista = new ArrayList<Factura>();
@@ -61,7 +77,12 @@ public class FacturaDAO implements GenericDAO<Factura> {
 
 	}
 
-	
+	/**
+	 * Busca una factura por su ID.
+	 *
+	 * @param id ID de la factura.
+	 * @return Factura encontrada o null.
+	 */
 	@Override
 	public Factura obtenerPorId(int id) {
 		String sql = "select id, fecha, id_cliente, id_empleado, subtotal, iva, total from factura where id = ?";
@@ -81,18 +102,36 @@ public class FacturaDAO implements GenericDAO<Factura> {
 
 	}
 
+	/**
+	 * Actualiza los datos de una factura.
+	 *
+	 * @param objeto Factura a actualizar.
+	 * @return true si se actualiza, false si no.
+	 */
 	@Override
 	public boolean actualizar(Factura objeto) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * Elimina una factura por su ID.
+	 *
+	 * @param id ID de la factura.
+	 * @return true si se elimina, false si no.
+	 */
 	@Override
 	public boolean eliminar(int id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 	
+	/**
+	 * Convierte una fila de ResultSet en un objeto Factura.
+	 *
+	 * @param rs Fila de la consulta.
+	 * @return Factura mapeada.
+	 */
 	private Factura mapearFila(ResultSet rs) throws SQLException {
 		Factura a = new Factura();
 		a.setId(rs.getInt("id"));
@@ -105,9 +144,16 @@ public class FacturaDAO implements GenericDAO<Factura> {
 		return a;
 	}
 	
+	/**
+	 * Filtra y obtiene las facturas de un mes específico.
+	 *
+	 * @param mes Número del mes (1 a 12).
+	 * @return Lista de facturas de ese mes.
+	 */
 	public List<Factura> mostrarFacturasPorMes(int mes) {
 		List<Factura> lista = new ArrayList<Factura>();
-		String sql = "SELECT id, fecha, id_cliente, id_empleado, subtotal, iva, total FROM factura WHERE MONTH(fecha) = ";
+		// Nota: Recuerda poner el "?" al final de esta query si te da error al probarlo
+		String sql = "SELECT id, fecha, id_cliente, id_empleado, subtotal, iva, total FROM factura WHERE MONTH(fecha) = ?";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 		
 			ps.setInt(1, mes);
@@ -125,42 +171,54 @@ public class FacturaDAO implements GenericDAO<Factura> {
 		return null;
 	}
 		
-		public List<Factura> mostrarFacturasPorFecha(LocalDate fecha) {
-			List<Factura> lista = new ArrayList<Factura>();
-			String sql = "SELECT id, fecha, id_cliente, id_empleado, subtotal, iva, total FROM factura WHERE fecha = ?";
-			try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-			
-				ps.setObject(1, fecha);
-				
-				ResultSet rs = ps.executeQuery();
-			
-				while (rs.next()) {
-					lista.add(mapearFila(rs));
-				}
-				return lista;
-
-			} catch (SQLException e) {
-				System.out.println("Error: " + e.getMessage());
-			}
-			return null;
-
-		}
+	/**
+	 * Filtra y obtiene las facturas de una fecha concreta.
+	 *
+	 * @param fecha Fecha a buscar.
+	 * @return Lista de facturas de esa fecha.
+	 */
+	public List<Factura> mostrarFacturasPorFecha(LocalDate fecha) {
+		List<Factura> lista = new ArrayList<Factura>();
+		String sql = "SELECT id, fecha, id_cliente, id_empleado, subtotal, iva, total FROM factura WHERE fecha = ?";
+		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 		
-		public Factura obtenerPorProducto(int id) {
-			String sql = "select id, fecha, id_cliente, id_empleado, subtotal, iva, total from factura where id_producto = ?";
-			try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-				
-				ps.setInt(1, id);
-				
-				ResultSet rs = ps.executeQuery();
-				while (rs.next()) {
-					return mapearFila(rs);
-				}
-
-			} catch (SQLException e) {
-				System.out.println("Error: " + e.getMessage());
+			ps.setObject(1, fecha);
+			
+			ResultSet rs = ps.executeQuery();
+		
+			while (rs.next()) {
+				lista.add(mapearFila(rs));
 			}
-			return null;
+			return lista;
 
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
 		}
+		return null;
+
+	}
+		
+	/**
+	 * Busca una factura asociada a un producto.
+	 *
+	 * @param id ID del producto.
+	 * @return Factura encontrada o null.
+	 */
+	public Factura obtenerPorProducto(int id) {
+		String sql = "select id, fecha, id_cliente, id_empleado, subtotal, iva, total from factura where id_producto = ?";
+		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+			
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return mapearFila(rs);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+		return null;
+
+	}
 }

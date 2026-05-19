@@ -14,8 +14,19 @@ import clase.Factura;
 import clase.Producto;
 import util.ConexionBD;
 
+/**
+ * DAO para gestionar la tabla producto.
+ * 
+ * @author alejandroEizan
+ */
 public class ProductoDAO implements GenericDAO<Producto> {
 
+	/**
+	 * Inserta un producto en la base de datos.
+	 *
+	 * @param objeto Producto a insertar.
+	 * @return true si se inserta, false si no.
+	 */
 	@Override
 	public boolean insertar(Producto objeto) {
 		String sql = "insert into producto (nombre, precio, stock) values (?,?,?)";
@@ -40,6 +51,11 @@ public class ProductoDAO implements GenericDAO<Producto> {
 		return false;
 	}
 
+	/**
+	 * Obtiene todos los productos de la base de datos.
+	 *
+	 * @return Lista de productos.
+	 */
 	@Override
 	public List<Producto> obtenerTodos() {
 		List<Producto> lista = new ArrayList<Producto>();
@@ -58,6 +74,12 @@ public class ProductoDAO implements GenericDAO<Producto> {
 
 	}
 
+	/**
+	 * Busca un producto por su ID.
+	 *
+	 * @param id ID del producto.
+	 * @return Producto encontrado o null.
+	 */
 	@Override
 	public Producto obtenerPorId(int id) {
 		String sql = "select id, nombre, preio, stock from Producto where id = ?";
@@ -77,6 +99,12 @@ public class ProductoDAO implements GenericDAO<Producto> {
 
 	}
 
+	/**
+	 * Actualiza el precio de un producto.
+	 *
+	 * @param objeto Producto con el precio actualizado.
+	 * @return true si se modifica, false si no.
+	 */
 	@Override
 	public boolean actualizar(Producto objeto) {
 
@@ -99,12 +127,24 @@ public class ProductoDAO implements GenericDAO<Producto> {
 		return false;
 	}
 
+	/**
+	 * Elimina un producto por su ID.
+	 *
+	 * @param id ID del producto a borrar.
+	 * @return true si se elimina, false si no.
+	 */
 	@Override
 	public boolean eliminar(int id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * Convierte una fila de ResultSet en un objeto Producto.
+	 *
+	 * @param rs Fila de la consulta.
+	 * @return Producto mapeado.
+	 */
 	private Producto mapearFila(ResultSet rs) throws SQLException {
 		Producto a = new Producto();
 		a.setId(rs.getInt("id"));
@@ -114,6 +154,12 @@ public class ProductoDAO implements GenericDAO<Producto> {
 		return a;
 	}
 
+	/**
+	 * Cuenta cuántas veces se repite un nombre de producto.
+	 *
+	 * @param nombre Nombre del producto.
+	 * @return Cantidad de coincidencias encontradas.
+	 */
 	public int obtenerPorNombre(String nombre) {
 		String sql = "select count(nombre) as contar from factura where nombre = ?";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -131,6 +177,12 @@ public class ProductoDAO implements GenericDAO<Producto> {
 		return 0;
 	}
 
+	/**
+	 * Elimina un producto de la base de datos por su ID.
+	 *
+	 * @param id ID del producto.
+	 * @return true si se borra con éxito, false si falla.
+	 */
 	public boolean eliminarProductoSiEstaEnLineaFactura(int id) {
 
 		String sql = "DELETE FROM producto where id = ?";
