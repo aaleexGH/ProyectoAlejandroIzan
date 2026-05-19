@@ -14,31 +14,31 @@ import clase.Factura;
 import clase.Producto;
 import util.ConexionBD;
 
-public class ProductoDAO implements GenericDAO<Producto>{
+public class ProductoDAO implements GenericDAO<Producto> {
 
 	@Override
 	public boolean insertar(Producto objeto) {
 		String sql = "insert into producto (nombre, precio, stock) values (?,?,?)";
-	    try (Connection con = ConexionBD.getConnection();
-	         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+		try (Connection con = ConexionBD.getConnection();
+				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-	          ps.setString(1, objeto.getNombre());
-	          ps.setDouble(2, objeto.getPrecio());
-	          ps.setInt(3, objeto.getStock());
-	          
-	          int filas = ps.executeUpdate();
-	          if (filas > 0) {
-	                ResultSet rs = ps.getGeneratedKeys();
-	                if (rs.next()) {
-	                    objeto.setId(rs.getInt(1));
-	                }
-	                return true;
-	            }
-	      } catch (SQLException e) {
-	            System.out.println("Error al insertar: " + e.getMessage());
-	      }
-	        return false;
-	    }
+			ps.setString(1, objeto.getNombre());
+			ps.setDouble(2, objeto.getPrecio());
+			ps.setInt(3, objeto.getStock());
+
+			int filas = ps.executeUpdate();
+			if (filas > 0) {
+				ResultSet rs = ps.getGeneratedKeys();
+				if (rs.next()) {
+					objeto.setId(rs.getInt(1));
+				}
+				return true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Error al insertar: " + e.getMessage());
+		}
+		return false;
+	}
 
 	@Override
 	public List<Producto> obtenerTodos() {
@@ -62,9 +62,9 @@ public class ProductoDAO implements GenericDAO<Producto>{
 	public Producto obtenerPorId(int id) {
 		String sql = "select id, nombre, preio, stock from Producto where id = ?";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-			
+
 			ps.setInt(1, id);
-			
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				return mapearFila(rs);
@@ -80,30 +80,29 @@ public class ProductoDAO implements GenericDAO<Producto>{
 	@Override
 	public boolean actualizar(Producto objeto) {
 		String sql = "UPDATE producto SET precio = ? WHERE id = ?;";
-	    try (Connection con = ConexionBD.getConnection();
-	         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+		try (Connection con = ConexionBD.getConnection();
+				PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-	          int filas = ps.executeUpdate();
-	          if (filas > 0) {
-	                ResultSet rs = ps.getGeneratedKeys();
-	                if (rs.next()) {
-	                    objeto.setId(rs.getInt(1));
-	                }
-	                return true;
-	            }
-	      } catch (SQLException e) {
-	            System.out.println("Error al insertar: " + e.getMessage());
-	      }
-	        return false;
-	    }
-
+			int filas = ps.executeUpdate();
+			if (filas > 0) {
+				ResultSet rs = ps.getGeneratedKeys();
+				if (rs.next()) {
+					objeto.setId(rs.getInt(1));
+				}
+				return true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Error al insertar: " + e.getMessage());
+		}
+		return false;
+	}
 
 	@Override
 	public boolean eliminar(int id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	private Producto mapearFila(ResultSet rs) throws SQLException {
 		Producto a = new Producto();
 		a.setId(rs.getInt("id"));
@@ -112,13 +111,13 @@ public class ProductoDAO implements GenericDAO<Producto>{
 		a.setStock(rs.getInt("stock"));
 		return a;
 	}
-	
+
 	public int obtenerPorNombre(String nombre) {
 		String sql = "select count(nombre) as contar from factura where nombre = ?";
 		try (Connection con = ConexionBD.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-			
-			ps.setString(1, nombre );
-			
+
+			ps.setString(1, nombre);
+
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				return (rs.getInt("contar"));
@@ -128,10 +127,6 @@ public class ProductoDAO implements GenericDAO<Producto>{
 			System.out.println("Error: " + e.getMessage());
 		}
 		return 0;
-
-	
-	
-	
-	
 	}
+
 }

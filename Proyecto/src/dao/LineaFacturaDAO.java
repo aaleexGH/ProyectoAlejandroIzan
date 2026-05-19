@@ -115,5 +115,5 @@ public class LineaFacturaDAO implements GenericDAO<LineaFactura>{
 		}
 		return null;
 	}
-
+	
 }
